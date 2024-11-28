@@ -952,6 +952,7 @@ function toggleMute() {
 function toggleMusic() {
     if (!game) return;
     const playButton = document.getElementById('playButton');
+    const muteButton = document.getElementById('muteButton');
     const isMuted = game.soundManager.toggleMusic();
     
     // Update button icon
@@ -969,8 +970,12 @@ function restartGame() {
     if (!game) return;
     // Keep the current character
     const currentCharacter = game.selectedCharacter;
+    const currentMusicMuted = game.soundManager.isMusicMuted;
+    const currentisMuted = game.soundManager.isMuted;
     game = new FlappyMemesGame();
     game.selectedCharacter = currentCharacter;
     game.syncCharacterSelection();
     document.getElementById('startScreen').style.display = 'block';
+    game.soundManager.isMusicMuted = currentMusicMuted;
+    game.soundManager.isMuted = currentisMuted;
 }
