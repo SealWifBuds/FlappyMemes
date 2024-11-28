@@ -952,7 +952,6 @@ function toggleMute() {
 function toggleMusic() {
     if (!game) return;
     const playButton = document.getElementById('playButton');
-    const muteButton = document.getElementById('muteButton');
     const isMuted = game.soundManager.toggleMusic();
     
     // Update button icon
