@@ -196,17 +196,30 @@ class FlappyMemesGame {
 
     initCharacterSelection() {
         const characterOptions = document.querySelectorAll('.character-option');
+        
+        const handleSelection = (option) => {
+            // Remove selected class from all options
+            characterOptions.forEach(opt => opt.classList.remove('selected'));
+            // Add selected class to clicked option
+            option.classList.add('selected');
+            // Update selected character
+            this.selectedCharacter = option.dataset.character;
+            // Reset game with new character
+            this.reset();
+        };
+
         characterOptions.forEach(option => {
-            option.addEventListener('click', () => {
-                // Remove selected class from all options
-                characterOptions.forEach(opt => opt.classList.remove('selected'));
-                // Add selected class to clicked option
-                option.classList.add('selected');
-                // Update selected character
-                this.selectedCharacter = option.dataset.character;
-                // Reset game with new character
-                this.reset();
+            // Handle click events
+            option.addEventListener('click', (e) => {
+                e.preventDefault();
+                handleSelection(option);
             });
+
+            // Handle touch events
+            option.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                handleSelection(option);
+            }, { passive: false });
         });
     }
 
@@ -665,6 +678,9 @@ class FlappyMemesGame {
                 tailEndX, tailEndY,
                 comet.x, comet.y
             );
+            
+            // Animate tail color
+            const offset = Math.sin(comet.size * 0.1) * 0.1;
             tailGradient.addColorStop(0, 'rgba(255, 255, 255, 0)');
             tailGradient.addColorStop(1, `rgba(255, 255, 255, ${comet.opacity})`);
 
