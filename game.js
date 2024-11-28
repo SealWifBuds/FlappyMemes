@@ -197,10 +197,14 @@ class FlappyMemesGame {
     initCharacterSelection() {
         const characterOptions = document.querySelectorAll('.character-option');
         
-        const handleSelection = (option) => {
+        const handleSelection = (option, event) => {
+            // Prevent any default behavior
+            event.preventDefault();
+            event.stopPropagation();
+            
             // Remove selected class from all options
             characterOptions.forEach(opt => opt.classList.remove('selected'));
-            // Add selected class to clicked option
+            // Add selected class to clicked/touched option
             option.classList.add('selected');
             // Update selected character
             this.selectedCharacter = option.dataset.character;
@@ -210,15 +214,20 @@ class FlappyMemesGame {
 
         characterOptions.forEach(option => {
             // Handle click events
-            option.addEventListener('click', (e) => {
-                e.preventDefault();
-                handleSelection(option);
-            });
+            option.addEventListener('click', (e) => handleSelection(option, e));
 
-            // Handle touch events
-            option.addEventListener('touchstart', (e) => {
+            // Handle touch events with improved handling
+            option.addEventListener('touchstart', (e) => handleSelection(option, e), { passive: false });
+            
+            // Prevent any other touch events from interfering
+            option.addEventListener('touchend', (e) => {
                 e.preventDefault();
-                handleSelection(option);
+                e.stopPropagation();
+            }, { passive: false });
+            
+            option.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
             }, { passive: false });
         });
     }
@@ -963,5 +972,5 @@ function restartGame() {
     game = new FlappyMemesGame();
     game.selectedCharacter = currentCharacter;
     game.syncCharacterSelection();
-    this.startScreen.style.display = 'block';
+    document.getElementById('startScreen').style.display = 'block';
 }
