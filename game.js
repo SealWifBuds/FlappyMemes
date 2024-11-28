@@ -223,6 +223,18 @@ class FlappyMemesGame {
         });
     }
 
+    syncCharacterSelection() {
+        // Update the visual selection to match the current character
+        const characterOptions = document.querySelectorAll('.character-option');
+        characterOptions.forEach(option => {
+            if (option.dataset.character === this.selectedCharacter) {
+                option.classList.add('selected');
+            } else {
+                option.classList.remove('selected');
+            }
+        });
+    }
+
     loadAssets() {
         // Load character images
         this.characterImgs = {
@@ -311,6 +323,9 @@ class FlappyMemesGame {
         // Hide game over screen and pause overlay
         this.gameOverScreen.style.display = 'none';
         this.pauseOverlay.style.display = 'none';
+
+        // Sync the visual character selection with current character
+        this.syncCharacterSelection();
     }
 
     initializeFlames() {
@@ -942,6 +957,11 @@ function startGame() {
 }
 
 function restartGame() {
+    if (!game) return;
+    // Keep the current character
+    const currentCharacter = game.selectedCharacter;
     game = new FlappyMemesGame();
+    game.selectedCharacter = currentCharacter;
+    game.syncCharacterSelection();
     this.startScreen.style.display = 'block';
 }
